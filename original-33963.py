@@ -170,3 +170,33 @@ def draw_dungeon(bg, fnt)
     # 四隅が暗闇の画像を重ねる
     bg.blit(imgDark, [0, 0])
     # 主人公の能力を表示
+    draw_para(bg, fnt)
+
+# 床にイベントを配置する
+def put_event():
+    global pl_x, pl_y, pl_d, pl_a
+    # 階段の配置
+    while True:
+        x = random.randint(3, DUNGEON_W-4)
+        y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[y][x] == 0):
+            # 階段の周囲を床にする
+            for ry in range(-1, 2):
+                for rx in range(-1, 2):
+                    dungeon[y+ry][x+rx] = 0
+            dungeon[y][x] = 3
+            break
+    # 宝箱と繭の配置
+    for i in range(60):
+        x = random.randint(3, DUNGEON_W-4)
+        y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[y][x] == 0):
+            dungeon[y][x] = random.choice([1,2,2,2,2])
+    # プレイヤーの初期位置
+    while True:
+        pl_x = random.randint(3, DUNGEON_W-4)
+        pl_y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[pl_y][pl_x] == 0):
+            break
+    pl_d = 1
+    pl_a = 2
