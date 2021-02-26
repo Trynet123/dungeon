@@ -200,3 +200,77 @@ def put_event():
             break
     pl_d = 1
     pl_a = 2
+    
+#主人公の移動
+def move_player(key):
+    global idx, tmr, pl_x, pl_y, pl_d, pl_a, pl_life, food, potion, blazegem, treasure
+    # 宝箱に乗った
+    if dungeon[pl_y][pl_x] = 1:
+        dungeon[pl_y][pl_x] = 0
+        treasure = random.choice([0,0,0,1,1,1,1,1,1,2])
+        if treasure == 0:
+            potion = potion + 1
+        if treasure == 1:
+            blazegem = blazegem + 1
+        if treasure == 2:
+            food = int(food/2)
+        idx = 3
+        tmr = 0
+        return
+    # 繭に乗った
+    if dungeon[pl_y][pl_x] == 2:
+        dungeon[pl_y][pl_x] = 0
+        r = random.randint(0, 99)
+        # 食料
+        if r < 40:
+            treasure = random.choice([3,3,3,4])
+            if treasure == 3: food = food + 20
+            if treasure == 4: food = food + 100
+            idx = 3
+            tmr = 0
+        # 敵出現
+        else:
+            idx = 10
+            tmr = 0
+        return
+    # 階段に乗った
+    if dungeon[pl_y][pl_x] == 3:
+        idx = 2
+        tmr = 0
+        return
+    
+    # 方向キーで上下左右に移動
+    x = pl_x
+    y = pl_y
+    if key[K_UP] == 1:
+        pl_d = 0
+        if dungeon[pl_y-1][pl_x] != 9:
+            pl_y = pl_y - 1
+    if key[K_DOWN] == 1:
+        pl_d = 1
+        if dungeon[pl_y+1][pl_x] != 9:
+            pl_y = pl_y + 1
+    if key[K_LEFT] == 1:
+        pl_d = 2
+        if dungeon[pl_y][pl_x-1] != 9:
+            pl_x = pl_x - 1
+    if key[K_RIGHT] == 1:
+        pl_d = 3
+        if dungeon[pl_y][pl_x+1] != 9:
+            pl_x = pl_x + 1
+    pl_a = pl_d*2
+    # 移動したら食料の量と体力を計算
+    if pl_x != x or pl_y != y:
+        # 移動したら足踏みアニメーション
+        pl_a = pl_a + tmr%2
+        if food > 0:
+            food = food - 1
+            if pl_life < pl_lifemax:
+                pl_life = pl_life + 1
+        else:
+            pl_life = pl_life - 5
+            if pl_life <= 0:
+                pl_life = 0
+                pygame.mixer.music.stop()
+                idx = 9
+                tmr = 0
