@@ -339,3 +339,37 @@ def draw_battle(bg, fnt):
         draw_text(bg, message[i], 600, 100+i*50, fnt, WHITE)
     # 主人公の能力を表示
     draw_para(bg, fnt)
+
+# コマンドの入力と表示
+def battle_command(bg, fnt, key):
+    global btl_cmd
+    ent = False
+    # Aキー
+    if key[K_a]:
+        btl_cmd = 0
+        ent = True
+    # Pキー
+    if key[K_p]:
+        btl_cmd = 1
+        ent = True
+    # Bキー
+    if key[K_b]:
+        btl_cmd = 2
+        ent = True
+    # Rキー
+    if key[K_r]:
+        btl_cmd = 3
+        ent = True
+    # UPキー
+    if key[K_UP] and btl_cmd > 0:
+        btl_cmd -= 1
+    # DOWNキー
+    if key[K_DOWN] and btl_cmd < 3:
+        btl_cmd += 1
+    if key[K_SPACE] or key[K_RETURN]:
+        ent = True
+    for i in range(4):
+        c = WHITE
+        if btl_cmd == i: c = BLINK[tmr%6]
+        draw_text(bg, COMMAND[i], 20, 360+i*60, fnt, c)
+    return ent
