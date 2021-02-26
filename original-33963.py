@@ -148,3 +148,166 @@ def make_dungeon():
                     if maze[y+1][x] == 0: dungeon[dy+1][dx] = 0
                     if maze[y][x-1] == 0: dungeon[dy][dx-1] = 0
                     if maze[y][x+1] == 0: dungeon[dy][dx+1] = 0
+#ダンジョンを描画
+def draw_dungeon(bg, fnt)
+    bg.fill(BLACK)
+    for y in range(-4, 6):
+        for x in range(-5, 6):
+            x = (x+5)*80
+            Y = (y+4)*80
+            dx = pl_x + x
+            dy = pl_y + y
+            if 0 <= dx and dx < DUNGEON_W and 0 <= dy and dy < DUNGEON_H:
+                if dungeon[dy][dx] <= 3:
+                    bg.blit(imgFloor[dungeon[dy][dx]],[X, Y])
+                if dungeon[dy][dx] == 9:
+                    bg.blit(imgWall, [X, Y-40])
+                    if dy >= 1 and dungeon[dy-1][dx] == 9:
+                        bg.blit(imgWall2, [X, Y-80])
+            # 主人公キャラの表示
+            if x == 0 and y == 0:
+                bg.blit(imgPlayer[pl_a], [X, Y-40])
+    # 四隅が暗闇の画像を重ねる
+    bg.blit(imgDark, [0, 0])
+    # 主人公の能力を表示
+    draw_para(bg, fnt)
+
+# 床にイベントを配置する
+def put_event():
+    global pl_x, pl_y, pl_d, pl_a
+    # 階段の配置
+    while True:
+        x = random.randint(3, DUNGEON_W-4)
+        y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[y][x] == 0):
+            # 階段の周囲を床にする
+            for ry in range(-1, 2):
+                for rx in range(-1, 2):
+                    dungeon[y+ry][x+rx] = 0
+            dungeon[y][x] = 3
+            break
+    # 宝箱と繭の配置
+    for i in range(60):
+        x = random.randint(3, DUNGEON_W-4)
+        y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[y][x] == 0):
+            dungeon[y][x] = random.choice([1,2,2,2,2])
+    # プレイヤーの初期位置
+    while True:
+        pl_x = random.randint(3, DUNGEON_W-4)
+        pl_y = random.randint(3, DUNGEON_H-4)
+        if(dungeon[pl_y][pl_x] == 0):
+            break
+    pl_d = 1
+    pl_a = 2
+
+#主人公の移動
+def move_player(key):
+    global idx, tmr, pl_x, pl_y, pl_d, pl_a, pl_life, food, potion, blazegem, treasure
+    # 宝箱に乗った
+    if dungeon[pl_y][pl_x] = 1:
+        dungeon[pl_y][pl_x] = 0
+        treasure = random.choice([0,0,0,1,1,1,1,1,1,2])
+        if treasure == 0:
+            potion = potion + 1
+        if treasure == 1:
+            blazegem = blazegem + 1
+        if treasure == 2:
+            food = int(food/2)
+        idx = 3
+        tmr = 0
+        return
+    # 繭に乗った
+    if dungeon[pl_y][pl_x] == 2:
+        dungeon[pl_y][pl_x] = 0
+        r = random.randint(0, 99)
+        # 食料
+        if r < 40:
+            treasure = random.choice([3,3,3,4])
+            if treasure == 3: food = food + 20
+            if treasure == 4: food = food + 100
+            idx = 3
+            tmr = 0
+        # 敵出現
+        else:
+            idx = 10
+            tmr = 0
+        return
+    # 階段に乗った
+    if dungeon[pl_y][pl_x] == 3:
+        idx = 2
+        tmr = 0
+        return
+    
+    # 方向キーで上下左右に移動
+    x = pl_x
+    y = pl_y
+    if key[K_UP] == 1:
+        pl_d = 0
+        if dungeon[pl_y-1][pl_x] != 9:
+            pl_y = pl_y - 1
+    if key[K_DOWN] == 1:
+        pl_d = 1
+        if dungeon[pl_y+1][pl_x] != 9:
+            pl_y = pl_y + 1
+    if key[K_LEFT] == 1:
+        pl_d = 2
+        if dungeon[pl_y][pl_x-1] != 9:
+            pl_x = pl_x - 1
+    if key[K_RIGHT] == 1:
+        pl_d = 3
+        if dungeon[pl_y][pl_x+1] != 9:
+            pl_x = pl_x + 1
+    pl_a = pl_d*2
+    # 移動したら食料の量と体力を計算
+    if pl_x != x or pl_y != y:
+        # 移動したら足踏みアニメーション
+        pl_a = pl_a + tmr%2
+        if food > 0:
+            food = food - 1
+            if pl_life < pl_lifemax:
+                pl_life = pl_life + 1
+        else:
+            pl_life = pl_life - 5
+            if pl_life <= 0:
+                pl_life = 0
+                pygame.mixer.music.stop()
+                idx = 9
+                tmr = 0
+
+# 影付き文字の表示
+def draw_text(bg, txt, x, y, fnt, col):
+    sur = fnt.render(txt, True, BLACK)
+    bg.blit(sur, [x+1, y+2])
+    sur = fnt.render(txt, True, col)
+    bg.blit(sur, [x, y])
+
+# 主人公の能力を表示
+def draw_para(bg, fnt):
+    X = 30
+    Y = 600
+    bg.blit(imgPara, [X, Y])
+    col = WHITE
+    if pl_life < 10 and tmr%2 == 0: col = RED
+    draw_text(bg, "{}/{}".format(pl_life, pl_lifemax), X+128, Y+6, fnt, col)
+    draw_text(bg, str(pl_str), X+128, Y+33, fnt, WHITE)
+    col = WHITE
+    if food == 0 and tmr%2 == 0: col = RED
+    draw_text(bg, str(food), X+128, Y+60, fnt, col)
+    draw_text(bg, str(potion), X+266, Y+6, fnt, WHITE)
+    draw_text(bg, str(blazegem), X+266, Y+33, fnt, WHITE)
+
+# 戦闘に入る準備をする
+def init_battle():
+    global imgEnemy, emy_name, emy_lifemax, emy_life, emy_str, emy_x, emy_y
+    typ = random.randint(0, floor)
+    if floor >= 10:
+        typ = random.randint(0. 9)
+    lev = random.randint(1, floor)
+    imgEnemy = pygame.image.load("image/enemy"+str(typ)+".png")
+    emy_name = EMY_NAME[typ] + " LV" + str(lev)
+    emy_lifemax = 60*(typ+1) + (lev-1)*10
+    emy_life = emy_lifemax
+    emy_str = int(emy_lifemax/8)
+    emy_x = 440 - imgEnemy.get_width()/2
+    emy_y = 560 - imgEnemy.get_height()
