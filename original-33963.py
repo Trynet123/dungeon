@@ -200,7 +200,7 @@ def put_event():
             break
     pl_d = 1
     pl_a = 2
-    
+
 #主人公の移動
 def move_player(key):
     global idx, tmr, pl_x, pl_y, pl_d, pl_a, pl_life, food, potion, blazegem, treasure
@@ -274,3 +274,10 @@ def move_player(key):
                 pygame.mixer.music.stop()
                 idx = 9
                 tmr = 0
+
+# 影付き文字の表示
+def draw_text(bg, txt, x, y, fnt, col)
+    sur = fnt.render(txt, True, BLACK)
+    bg.blit(sur, [x+1, y+2])
+    sur = fnt.render(txt, True, col)
+    bg.blit(sur, [x, y])
