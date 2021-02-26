@@ -46,3 +46,54 @@ imgEffect = [
     pygame.image.load("image/effect_a.png"),
     pygame.image.load("image/effect_b.png")
 ]
+
+# 変数の宣言
+speed = 1
+idx = 0
+tmr = 0
+floor = 0
+fl_max = 1
+welcome = 0
+
+pl_x = 0
+pl_y = 0
+pl_d = 0
+pl_a = 0
+pl_lifemax = 0
+pl_life = 0
+pl_str = 0
+food = 0
+potion = 0
+blazegem = 0
+treasure = 0
+
+emy_name = ""
+emy_lifemax = 0
+emy_life = 0
+emy_str = 0
+emy_x = 0
+emy_y = 0
+emy_step = 0
+emy_blink = 0
+
+dmg_eff = 0
+btl_cmd = 0
+
+COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
+TRE_NAME = ["Potion", "Blaze gem", "Food spoiled", "Food +20", "Food +100"]
+EMY_NAME = [
+    "Green slime", "Red slime", "Axe beast", "Ogre", "Sword man",
+    "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
+    ]
+
+MAZE_W = 11
+MAZE_H = 9
+maze = []
+for y in range(MAZE_H):
+    maze.append([0]*MAZE_W)
+
+DUNGEON_W = MAZE_W*3
+DUNGEON_H = MAZE_H*3
+dungeon = []
+for y in range(DUNGEON_H):
+    dungeon.append([0]*DUNGEON_W)
