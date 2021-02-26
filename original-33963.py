@@ -97,3 +97,54 @@ DUNGEON_H = MAZE_H*3
 dungeon = []
 for y in range(DUNGEON_H):
     dungeon.append([0]*DUNGEON_W)
+
+# ダンジョンの自動生成
+def make_dungeon():
+    XP = [ 0, 1, 0,-1]
+    YP = [-1, 0, 1, 0]
+    # 周りの壁
+    for x in range(MAZE_W):
+        maze[0][x] = 1
+        maze[MAZE_H-1][x] = 1
+    for y in range(1, MAZE_H-1):
+        maze[y][0] = 1
+        maze[y][MAZE_W-1] = 1
+    #中を何もない状態に
+    for y in range(1, MAZE_H-1):
+        for x in range(1, MAZE_W-1):
+            maze[y][x] = 0
+    #柱
+    for y in range(2, MAZE_H-2, 2):
+        for x in range(2, MAZE_W-2, 2):
+            maze[y][x] = 1
+    #柱から上下左右に壁を作る
+    for y in range(2, MAZE_H-2, 2):
+        for x in range(2, MAZE_W-2, 2):
+            d = random.randint(0, 3)
+            #二列目からは左に壁を作らない
+            if x > 2:
+                d = random.randint(0, 2)
+            maze[y+YP[d]][x+XP[d]] = 1
+    #迷路からダンジョンを作る
+    #全体を壁にする
+    for y in range(DUNGEON_H):
+        for x in range(DUNGEON_W):
+            dungeon[y][x] = 9
+    #部屋と通路の配置
+    for y in range(1, MAZE_H-1):
+        for x in range(1, MAZE_W-1):
+            dx = x*3+1
+            dy = y*3+1
+            if maze[y][x] == 0:
+                # 部屋を作る
+                if random.randint(0, 99) < 20:
+                    for ry in range(-1, 2):
+                        for rx in range(-1, 2):
+                            dungeon[dy+ry][dx+rx] = 0
+                #通路を作る
+                else:
+                    dungeon[dy][dx] = 0
+                    if maze[y-1][x] == 0: dungeon[dy-1][dx] = 0
+                    if maze[y+1][x] == 0: dungeon[dy+1][dx] = 0
+                    if maze[y][x-1] == 0: dungeon[dy][dx-1] = 0
+                    if maze[y][x+1] == 0: dungeon[dy][dx+1] = 0
