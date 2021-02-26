@@ -148,3 +148,25 @@ def make_dungeon():
                     if maze[y+1][x] == 0: dungeon[dy+1][dx] = 0
                     if maze[y][x-1] == 0: dungeon[dy][dx-1] = 0
                     if maze[y][x+1] == 0: dungeon[dy][dx+1] = 0
+#ダンジョンを描画
+def draw_dungeon(bg, fnt)
+    bg.fill(BLACK)
+    for y in range(-4, 6):
+        for x in range(-5, 6):
+            x = (x+5)*80
+            Y = (y+4)*80
+            dx = pl_x + x
+            dy = pl_y + y
+            if 0 <= dx and dx < DUNGEON_W and 0 <= dy and dy < DUNGEON_H:
+                if dungeon[dy][dx] <= 3:
+                    bg.blit(imgFloor[dungeon[dy][dx]],[X, Y])
+                if dungeon[dy][dx] == 9:
+                    bg.blit(imgWall, [X, Y-40])
+                    if dy >= 1 and dungeon[dy-1][dx] == 9:
+                        bg.blit(imgWall2, [X, Y-80])
+            # 主人公キャラの表示
+            if x == 0 and y == 0:
+                bg.blit(imgPlayer[pl_a], [X, Y-40])
+    # 四隅が暗闇の画像を重ねる
+    bg.blit(imgDark, [0, 0])
+    # 主人公の能力を表示
