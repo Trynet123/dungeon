@@ -318,3 +318,24 @@ def draw_bar(bg, x, y, w, h, val, max):
     pygame.draw.rect(bg, BLACK, [x, y, w, h])
     if val > 0:
         pygame.draw.rect(bg, (0,128,255), [x, y, w*val/max, h])
+
+# 戦闘画面の描画
+def draw_battle(bg, fnt):
+    global emy_blink, dmg_eff
+    bx = 0
+    by = 0
+    if dmg_eff > 0:
+        dmg_eff = dmg_eff - 1
+        bx = random.randint(-20, 20)
+        by = random.randint(-10, 10)
+    bg.blit(imgBtlBG, [bx, by])
+    if emy_life > 0 and emy_blink%2 == 0:
+        bg.blit(imgEnemy, [emy_x, emy_y + emy_step])
+    draw_bar(bg, 340, 580, 200, 10, emy_life, emy_lifemax)
+    if emy_blink > 0:
+        emy_blink = emy_blink - 1
+    # 戦闘メッセージの表示
+    for i in range(10):
+        draw_text(bg, message[i], 600, 100+i*50, fnt, WHITE)
+    # 主人公の能力を表示
+    draw_para(bg, fnt)
