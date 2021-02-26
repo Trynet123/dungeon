@@ -296,3 +296,18 @@ def draw_para(bg, fnt):
     draw_text(bg, str(food), X+128, Y+60, fnt, col)
     draw_text(bg, str(potion), X+266, Y+6, fnt, WHITE)
     draw_text(bg, str(blazegem), X+266, Y+33, fnt, WHITE)
+
+# 戦闘に入る準備をする
+def init_battle():
+    global imgEnemy, emy_name, emy_lifemax, emy_life, emy_str, emy_x, emy_y
+    typ = random.randint(0, floor)
+    if floor >= 10:
+        typ = random.randint(0. 9)
+    lev = random.randint(1, floor)
+    imgEnemy = pygame.image.load("image/enemy"+str(typ)+".png")
+    emy_name = EMY_NAME[typ] + " LV" + str(lev)
+    emy_lifemax = 60*(typ+1) + (lev-1)*10
+    emy_life = emy_lifemax
+    emy_str = int(emy_lifemax/8)
+    emy_x = 440 - imgEnemy.get_width()/2
+    emy_y = 560 - imgEnemy.get_height()
