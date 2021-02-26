@@ -373,3 +373,18 @@ def battle_command(bg, fnt, key):
         if btl_cmd == i: c = BLINK[tmr%6]
         draw_text(bg, COMMAND[i], 20, 360+i*60, fnt, c)
     return ent
+
+# 戦闘メッセージの表示処理
+message = [""]*10
+def init_message():
+    for i in range(10):
+        message[i] = ""
+
+def set_message(msg):
+    for i in range(10):
+        if message[i] == "":
+            message[i] = msg
+            return
+    for i in range(9):
+        message[i] = message[i+1]
+    message[9] = msg
