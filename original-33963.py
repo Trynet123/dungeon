@@ -276,8 +276,23 @@ def move_player(key):
                 tmr = 0
 
 # 影付き文字の表示
-def draw_text(bg, txt, x, y, fnt, col)
+def draw_text(bg, txt, x, y, fnt, col):
     sur = fnt.render(txt, True, BLACK)
     bg.blit(sur, [x+1, y+2])
     sur = fnt.render(txt, True, col)
     bg.blit(sur, [x, y])
+
+# 主人公の能力を表示
+def draw_para(bg, fnt):
+    X = 30
+    Y = 600
+    bg.blit(imgPara, [X, Y])
+    col = WHITE
+    if pl_life < 10 and tmr%2 == 0: col = RED
+    draw_text(bg, "{}/{}".format(pl_life, pl_lifemax), X+128, Y+6, fnt, col)
+    draw_text(bg, str(pl_str), X+128, Y+33, fnt, WHITE)
+    col = WHITE
+    if food == 0 and tmr%2 == 0: col = RED
+    draw_text(bg, str(food), X+128, Y+60, fnt, col)
+    draw_text(bg, str(potion), X+266, Y+6, fnt, WHITE)
+    draw_text(bg, str(blazegem), X+266, Y+33, fnt, WHITE)
