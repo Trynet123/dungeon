@@ -149,7 +149,7 @@ def make_dungeon():
                     if maze[y][x-1] == 0: dungeon[dy][dx-1] = 0
                     if maze[y][x+1] == 0: dungeon[dy][dx+1] = 0
 #ダンジョンを描画
-def draw_dungeon(bg, fnt)
+def draw_dungeon(bg, fnt):
     bg.fill(BLACK)
     for y in range(-4, 6):
         for x in range(-5, 6):
@@ -205,7 +205,7 @@ def put_event():
 def move_player(key):
     global idx, tmr, pl_x, pl_y, pl_d, pl_a, pl_life, food, potion, blazegem, treasure
     # 宝箱に乗った
-    if dungeon[pl_y][pl_x] = 1:
+    if dungeon[pl_y][pl_x] == 1:
         dungeon[pl_y][pl_x] = 0
         treasure = random.choice([0,0,0,1,1,1,1,1,1,2])
         if treasure == 0:
@@ -390,7 +390,7 @@ def set_message(msg):
     message[9] = msg
 
 # メイン処理
-def main()：
+def main():
     global speed, idx, tmr, floor, fl_max, welcome
     global pl_a, pl_lifemax, pl_life, pl_str, food, potion, blazegem
     global emy_life, emy_step, emy_blink, dmg_eff
@@ -676,5 +676,5 @@ def main()：
         pygame.display.update()
         clock.tick(4+2*speed)
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     main()
