@@ -302,7 +302,7 @@ def init_battle():
     global imgEnemy, emy_name, emy_lifemax, emy_life, emy_str, emy_x, emy_y
     typ = random.randint(0, floor)
     if floor >= 10:
-        typ = random.randint(0. 9)
+        typ = random.randint(0, 9)
     lev = random.randint(1, floor)
     imgEnemy = pygame.image.load("image/enemy"+str(typ)+".png")
     emy_name = EMY_NAME[typ] + " LV" + str(lev)
@@ -311,3 +311,10 @@ def init_battle():
     emy_str = int(emy_lifemax/8)
     emy_x = 440 - imgEnemy.get_width()/2
     emy_y = 560 - imgEnemy.get_height()
+
+# 敵の体力を表示するバー
+def draw_bar(bg, x, y, w, h, val, max):
+    pygame.draw.rect(bg, WHITE, [x-2, y-2, w+4, h+4 ])
+    pygame.draw.rect(bg, BLACK, [x, y, w, h])
+    if val > 0:
+        pygame.draw.rect(bg, (0,128,255), [x, y, w*val/max, h])
