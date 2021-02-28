@@ -8,7 +8,7 @@ WHITE = (255, 255, 255)
 BLACK = (  0,   0,   0)
 RED   = (255,   0,   0)
 CYAN  = (  0, 255, 255)
-BLINK = [(224,255,255), (192, 240,255), (128,224,255), (64,192,255), (128,224,255), (192,240,255)]
+BLINK = [(224,255,255), (192,240,255), (128,224,255), (64,192,255), (128,224,255), (192,240,255)]
 
 # 画像の読み込み
 imgTitle = pygame.image.load("image/title.png")
@@ -40,7 +40,7 @@ imgPlayer = [
     pygame.image.load("image/mychr5.png"),
     pygame.image.load("image/mychr6.png"),
     pygame.image.load("image/mychr7.png"),
-    pygame.imgae.load("image/mychr8.png")
+    pygame.image.load("image/mychr8.png")
 ]
 imgEffect = [
     pygame.image.load("image/effect_a.png"),
@@ -80,7 +80,7 @@ dmg_eff = 0
 btl_cmd = 0
 
 COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
-TRE_NAME = ["Potion", "Blaze gem", "Food spoiled", "Food +20", "Food +100"]
+TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
 EMY_NAME = [
     "Green slime", "Red slime", "Axe beast", "Ogre", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
@@ -98,11 +98,10 @@ dungeon = []
 for y in range(DUNGEON_H):
     dungeon.append([0]*DUNGEON_W)
 
-# ダンジョンの自動生成
-def make_dungeon():
+def make_dungeon(): # ダンジョンの自動生成
     XP = [ 0, 1, 0,-1]
     YP = [-1, 0, 1, 0]
-    # 周りの壁
+    #周りの壁
     for x in range(MAZE_W):
         maze[0][x] = 1
         maze[MAZE_H-1][x] = 1
@@ -121,11 +120,11 @@ def make_dungeon():
     for y in range(2, MAZE_H-2, 2):
         for x in range(2, MAZE_W-2, 2):
             d = random.randint(0, 3)
-            #二列目からは左に壁を作らない
-            if x > 2:
+            if x > 2: # 二列目からは左に壁を作らない
                 d = random.randint(0, 2)
             maze[y+YP[d]][x+XP[d]] = 1
-    #迷路からダンジョンを作る
+
+    # 迷路からダンジョンを作る
     #全体を壁にする
     for y in range(DUNGEON_H):
         for x in range(DUNGEON_W):
@@ -136,52 +135,45 @@ def make_dungeon():
             dx = x*3+1
             dy = y*3+1
             if maze[y][x] == 0:
-                # 部屋を作る
-                if random.randint(0, 99) < 20:
+                if random.randint(0, 99) < 20: # 部屋を作る
                     for ry in range(-1, 2):
                         for rx in range(-1, 2):
                             dungeon[dy+ry][dx+rx] = 0
-                #通路を作る
-                else:
+                else: # 通路を作る
                     dungeon[dy][dx] = 0
                     if maze[y-1][x] == 0: dungeon[dy-1][dx] = 0
                     if maze[y+1][x] == 0: dungeon[dy+1][dx] = 0
                     if maze[y][x-1] == 0: dungeon[dy][dx-1] = 0
                     if maze[y][x+1] == 0: dungeon[dy][dx+1] = 0
-#ダンジョンを描画
-def draw_dungeon(bg, fnt):
+
+def draw_dungeon(bg, fnt): # ダンジョンを描画する
     bg.fill(BLACK)
     for y in range(-4, 6):
         for x in range(-5, 6):
-            x = (x+5)*80
+            X = (x+5)*80
             Y = (y+4)*80
             dx = pl_x + x
             dy = pl_y + y
             if 0 <= dx and dx < DUNGEON_W and 0 <= dy and dy < DUNGEON_H:
                 if dungeon[dy][dx] <= 3:
-                    bg.blit(imgFloor[dungeon[dy][dx]],[X, Y])
+                    bg.blit(imgFloor[dungeon[dy][dx]], [X, Y])
                 if dungeon[dy][dx] == 9:
                     bg.blit(imgWall, [X, Y-40])
                     if dy >= 1 and dungeon[dy-1][dx] == 9:
                         bg.blit(imgWall2, [X, Y-80])
-            # 主人公キャラの表示
-            if x == 0 and y == 0:
+            if x == 0 and y == 0: # 主人公キャラの表示
                 bg.blit(imgPlayer[pl_a], [X, Y-40])
-    # 四隅が暗闇の画像を重ねる
-    bg.blit(imgDark, [0, 0])
-    # 主人公の能力を表示
-    draw_para(bg, fnt)
+    bg.blit(imgDark, [0, 0]) # 四隅が暗闇の画像を重ねる
+    draw_para(bg, fnt) # 主人公の能力を表示
 
-# 床にイベントを配置する
-def put_event():
+def put_event(): # 床にイベントを配置する
     global pl_x, pl_y, pl_d, pl_a
     # 階段の配置
     while True:
         x = random.randint(3, DUNGEON_W-4)
         y = random.randint(3, DUNGEON_H-4)
         if(dungeon[y][x] == 0):
-            # 階段の周囲を床にする
-            for ry in range(-1, 2):
+            for ry in range(-1, 2): # 階段の周囲を床にする
                 for rx in range(-1, 2):
                     dungeon[y+ry][x+rx] = 0
             dungeon[y][x] = 3
@@ -201,11 +193,10 @@ def put_event():
     pl_d = 1
     pl_a = 2
 
-#主人公の移動
-def move_player(key):
+def move_player(key): # 主人公の移動
     global idx, tmr, pl_x, pl_y, pl_d, pl_a, pl_life, food, potion, blazegem, treasure
-    # 宝箱に乗った
-    if dungeon[pl_y][pl_x] == 1:
+
+    if dungeon[pl_y][pl_x] == 1: # 宝箱に載った
         dungeon[pl_y][pl_x] = 0
         treasure = random.choice([0,0,0,1,1,1,1,1,1,2])
         if treasure == 0:
@@ -217,28 +208,24 @@ def move_player(key):
         idx = 3
         tmr = 0
         return
-    # 繭に乗った
-    if dungeon[pl_y][pl_x] == 2:
+    if dungeon[pl_y][pl_x] == 2: # 繭に載った
         dungeon[pl_y][pl_x] = 0
         r = random.randint(0, 99)
-        # 食料
-        if r < 40:
+        if r < 40: # 食料
             treasure = random.choice([3,3,3,4])
             if treasure == 3: food = food + 20
             if treasure == 4: food = food + 100
             idx = 3
             tmr = 0
-        # 敵出現
-        else:
+        else: # 敵出現
             idx = 10
             tmr = 0
         return
-    # 階段に乗った
-    if dungeon[pl_y][pl_x] == 3:
+    if dungeon[pl_y][pl_x] == 3: # 階段に載った
         idx = 2
         tmr = 0
         return
-    
+
     # 方向キーで上下左右に移動
     x = pl_x
     y = pl_y
@@ -259,10 +246,8 @@ def move_player(key):
         if dungeon[pl_y][pl_x+1] != 9:
             pl_x = pl_x + 1
     pl_a = pl_d*2
-    # 移動したら食料の量と体力を計算
-    if pl_x != x or pl_y != y:
-        # 移動したら足踏みアニメーション
-        pl_a = pl_a + tmr%2
+    if pl_x != x or pl_y != y: # 移動したら食料の量と体力を計算
+        pl_a = pl_a + tmr%2 # 移動したら足踏みのアニメーション
         if food > 0:
             food = food - 1
             if pl_life < pl_lifemax:
@@ -275,15 +260,13 @@ def move_player(key):
                 idx = 9
                 tmr = 0
 
-# 影付き文字の表示
-def draw_text(bg, txt, x, y, fnt, col):
+def draw_text(bg, txt, x, y, fnt, col): # 影付き文字の表示
     sur = fnt.render(txt, True, BLACK)
     bg.blit(sur, [x+1, y+2])
     sur = fnt.render(txt, True, col)
     bg.blit(sur, [x, y])
 
-# 主人公の能力を表示
-def draw_para(bg, fnt):
+def draw_para(bg, fnt): # 主人公の能力を表示
     X = 30
     Y = 600
     bg.blit(imgPara, [X, Y])
@@ -297,8 +280,7 @@ def draw_para(bg, fnt):
     draw_text(bg, str(potion), X+266, Y+6, fnt, WHITE)
     draw_text(bg, str(blazegem), X+266, Y+33, fnt, WHITE)
 
-# 戦闘に入る準備をする
-def init_battle():
+def init_battle(): # 戦闘に入る準備をする
     global imgEnemy, emy_name, emy_lifemax, emy_life, emy_str, emy_x, emy_y
     typ = random.randint(0, floor)
     if floor >= 10:
@@ -309,18 +291,16 @@ def init_battle():
     emy_lifemax = 60*(typ+1) + (lev-1)*10
     emy_life = emy_lifemax
     emy_str = int(emy_lifemax/8)
-    emy_x = 440 - imgEnemy.get_width()/2
-    emy_y = 560 - imgEnemy.get_height()
+    emy_x = 440-imgEnemy.get_width()/2
+    emy_y = 560-imgEnemy.get_height()
 
-# 敵の体力を表示するバー
-def draw_bar(bg, x, y, w, h, val, max):
-    pygame.draw.rect(bg, WHITE, [x-2, y-2, w+4, h+4 ])
+def draw_bar(bg, x, y, w, h, val, max): # 敵の体力を表示するバー
+    pygame.draw.rect(bg, WHITE, [x-2, y-2, w+4, h+4])
     pygame.draw.rect(bg, BLACK, [x, y, w, h])
     if val > 0:
         pygame.draw.rect(bg, (0,128,255), [x, y, w*val/max, h])
 
-# 戦闘画面の描画
-def draw_battle(bg, fnt):
+def draw_battle(bg, fnt): # 戦闘画面の描画
     global emy_blink, dmg_eff
     bx = 0
     by = 0
@@ -330,41 +310,32 @@ def draw_battle(bg, fnt):
         by = random.randint(-10, 10)
     bg.blit(imgBtlBG, [bx, by])
     if emy_life > 0 and emy_blink%2 == 0:
-        bg.blit(imgEnemy, [emy_x, emy_y + emy_step])
+        bg.blit(imgEnemy, [emy_x, emy_y+emy_step])
     draw_bar(bg, 340, 580, 200, 10, emy_life, emy_lifemax)
     if emy_blink > 0:
         emy_blink = emy_blink - 1
-    # 戦闘メッセージの表示
-    for i in range(10):
+    for i in range(10): # 戦闘メッセージの表示
         draw_text(bg, message[i], 600, 100+i*50, fnt, WHITE)
-    # 主人公の能力を表示
-    draw_para(bg, fnt)
+    draw_para(bg, fnt) # 主人公の能力を表示
 
-# コマンドの入力と表示
-def battle_command(bg, fnt, key):
+def battle_command(bg, fnt, key): # コマンドの入力と表示
     global btl_cmd
     ent = False
-    # Aキー
-    if key[K_a]:
+    if key[K_a]: # Aキー
         btl_cmd = 0
         ent = True
-    # Pキー
-    if key[K_p]:
+    if key[K_p]: # Pキー
         btl_cmd = 1
         ent = True
-    # Bキー
-    if key[K_b]:
+    if key[K_b]: # Bキー
         btl_cmd = 2
         ent = True
-    # Rキー
-    if key[K_r]:
+    if key[K_r]: # Rキー
         btl_cmd = 3
         ent = True
-    # UPキー
-    if key[K_UP] and btl_cmd > 0:
+    if key[K_UP] and btl_cmd > 0: #↑キー
         btl_cmd -= 1
-    # DOWNキー
-    if key[K_DOWN] and btl_cmd < 3:
+    if key[K_DOWN] and btl_cmd < 3: #↓キー
         btl_cmd += 1
     if key[K_SPACE] or key[K_RETURN]:
         ent = True
@@ -389,8 +360,7 @@ def set_message(msg):
         message[i] = message[i+1]
     message[9] = msg
 
-# メイン処理
-def main():
+def main(): # メイン処理
     global speed, idx, tmr, floor, fl_max, welcome
     global pl_a, pl_lifemax, pl_life, pl_str, food, potion, blazegem
     global emy_life, emy_step, emy_blink, dmg_eff
@@ -405,8 +375,7 @@ def main():
     font = pygame.font.Font(None, 40)
     fontS = pygame.font.Font(None, 30)
 
-    # 効果音とジングル
-    se = [
+    se = [ # 効果音とジングル
         pygame.mixer.Sound("sound/ohd_se_attack.ogg"),
         pygame.mixer.Sound("sound/ohd_se_blaze.ogg"),
         pygame.mixer.Sound("sound/ohd_se_potion.ogg"),
@@ -429,8 +398,7 @@ def main():
         tmr = tmr + 1
         key = pygame.key.get_pressed()
 
-        # タイトル画面
-        if idx == 0:
+        if idx == 0: # タイトル画面
             if tmr == 1:
                 pygame.mixer.music.load("sound/ohd_bgm_title.ogg")
                 pygame.mixer.music.play(-1)
@@ -454,78 +422,74 @@ def main():
                 pygame.mixer.music.load("sound/ohd_bgm_field.ogg")
                 pygame.mixer.music.play(-1)
             
-            # プレイヤーの移動
-            elif idx == 1:
-                move_player(key)
-                draw_dungeon(screen, fontS)
-                draw_text(screen, "floor {} ({},{})".format(floor, pl_x, pl_y), 60, 40, fontS, WHITE)
-                if welcome > 0:
-                    welcome = welcome - 1
-                    draw_text(screen, "Welcome to floor {}.".format(floor), 300, 180, font, CYAN)
+        elif idx == 1: # プレイヤーの移動
+            move_player(key)
+            draw_dungeon(screen, fontS)
+            draw_text(screen, "floor {} ({},{})".format(floor, pl_x, pl_y), 60, 40, fontS, WHITE)
+            if welcome > 0:
+                welcome = welcome - 1
+                draw_text(screen, "Welcome to floor {}.".format(floor), 300, 180, font, CYAN)
 
-            # 画面切り替え
-            elif idx == 2:
+        elif idx == 2: # 画面切り替え
+            draw_dungeon(screen, fontS)
+            if 1 <= tmr and tmr <= 5:
+                h = 80*tmr
+                pygame.draw.rect(screen, BLACK, [0, 0, 880, h])
+                pygame.draw.rect(screen, BLACK, [0, 720-h, 880, h])
+            if tmr == 5:
+                floor = floor + 1
+                if floor > fl_max:
+                    fl_max = floor
+                welcome = 15
+                make_dungeon()
+                put_event()
+            if 6 <= tmr and tmr <= 9:
+                h = 80*(10-tmr)
+                pygame.draw.rect(screen, BLACK, [0, 0, 880, h])
+                pygame.draw.rect(screen, BLACK, [0, 720-h, 880, h])
+            if tmr == 10:
+                idx = 1
+        
+        elif idx == 3: # アイテム入手もしくはトラップ
+            draw_dungeon(screen, fontS)
+            screen.blit(imgItem[treasure], [320, 220])
+            draw_text(screen, TRE_NAME[treasure], 380, 240, font, WHITE)
+            if tmr == 10:
+                idx = 1
+        
+        elif idx == 9: # ゲームオーバー
+            if tmr <= 30:
+                PL_TURN = [2, 4, 0, 6]
+                pl_a = PL_TURN[tmr%4]
+                if tmr == 30: pl_a = 8 # 倒れた絵
                 draw_dungeon(screen, fontS)
-                if 1 <= tmr and tmr <= 5:
-                    h = 80*tmr
-                    pygame.draw.rect(screen, BLACK, [0, 0, 880, h])
-                    pygame.draw.rect(screen, BLACK, [0, 720-h, 880, h])
-                if tmr == 5:
-                    floor = floor + 1
-                    if floor < fl_max:
-                        fl_max = floor
-                    welcome = 15
-                    make_dungeon()
-                    put_event()
-                if 6 <= tmr and tmr <= 9:
-                    h = 80*(10 - tmr)
-                    pygame.draw.rect(screen, BLACK, [0, 0, 880, h])
-                    pygame.draw.rect(screen, Black, [0, 720-h, 880, h])
-                if tmr == 10:
-                    idx = 1
-            # アイテム入手もしくはトラップ
-            elif idx == 3:
-                draw_dungeon(screen, fontS)
-                screen.blit(imgItem[treasure], [320, 220])
-                draw_text(screen, TRE_NAME[treasure], 380, 240, font, WHITE)
-                if tmr == 10:
-                    idx = 1
-            # ゲームオーバー
-            elif idx == 9:
-                if tmr <= 30:
-                    PL_TURN = [2, 4, 0, 6]
-                    pl_a = PL_TURN[tmr%4]
-                    # 倒れた絵
-                    if tmr == 30: pl_a = 8
-                    draw_dungeon(screen, fontS)
-                elif tmr == 31:
-                    se[3].play()
-                    draw_text(screen, "You died.", 360, 240, font, RED)
-                    draw_text(screen, "Game over.", 360, 380, font, RED)
-                elif tmr == 100:
-                    idx = 0
-                    tmr = 0
-            # 戦闘開始
-            elif idx == 10:
-                if tmr == 1:
-                    pygame.mixer.music.load("sound/ohd_bgm_battle.ogg")
-                    pygame.mixer.music.play(-1)
-                    init_battle()
-                    init_message()
-                elif tmr <= 4:
-                    bx = (4-tmr)*220
-                    by = 0
-                    screen.blit(imgBtlBG, [bx, by])
-                    draw_text(screen, "Encounter!", 350, 200, font, WHITE)
-                elif tmr <= 16:
-                    draw_battle(screen, fontS)
-                    draw_text(screen, emy_name+" appear!", 300, 200, font, WHITE)
-                else:
-                    idx = 11
-                    tmr = 0
+            elif tmr == 31:
+                se[3].play()
+                draw_text(screen, "You died.", 360, 240, font, RED)
+                draw_text(screen, "Game over.", 360, 380, font, RED)
+            elif tmr == 100:
+                idx = 0
+                tmr = 0
+        
+        elif idx == 10: # 戦闘開始
+            if tmr == 1:
+                pygame.mixer.music.load("sound/ohd_bgm_battle.ogg")
+                pygame.mixer.music.play(-1)
+                init_battle()
+                init_message()
+            elif tmr <= 4:
+                bx = (4-tmr)*220
+                by = 0
+                screen.blit(imgBtlBG, [bx, by])
+                draw_text(screen, "Encounter!", 350, 200, font, WHITE)
+            elif tmr <= 16:
+                draw_battle(screen, fontS)
+                draw_text(screen, emy_name+" appear!", 300, 200, font, WHITE)
+            else:
+                idx = 11
+                tmr = 0
 
-        # プレイヤーのターン（入力待ち）
-        elif idx == 11:
+        elif idx == 11: # プレイヤーのターン（入力待ち）
             draw_battle(screen, fontS)
             if tmr == 1: set_message("Your turn.")
             if battle_command(screen, font, key) == True:
@@ -542,8 +506,7 @@ def main():
                     idx = 14
                     tmr = 0
         
-        # プレイヤーの攻撃
-        elif idx == 12:
+        elif idx == 12: # プレイヤーの攻撃
             draw_battle(screen, fontS)
             if tmr == 1:
                 set_message("You attack!")
@@ -563,8 +526,8 @@ def main():
             if tmr == 16:
                 idx = 13
                 tmr = 0
-        # 敵のターン、敵の攻撃
-        elif idx == 13:
+        
+        elif idx == 13: # 敵のターン、敵の攻撃
             draw_battle(screen, fontS)
             if tmr == 1:
                 set_message("Enemy turn.")
@@ -586,8 +549,8 @@ def main():
             if tmr == 20:
                 idx = 11
                 tmr = 0
-        #逃げられる？
-        elif idx == 14:
+        
+        elif idx == 14: # 逃げられる？
             draw_battle(screen, fontS)
             if tmr == 1: set_message("...")
             if tmr == 2: set_message("......")
@@ -601,8 +564,8 @@ def main():
             if tmr == 10:
                 idx = 13
                 tmr = 0
-        # 敗北
-        elif idx == 15:
+        
+        elif idx == 15: # 敗北
             draw_battle(screen, fontS)
             if tmr == 1:
                 pygame.mixer.music.stop()
@@ -610,8 +573,8 @@ def main():
             if tmr == 11:
                 idx = 9
                 tmr = 29
-        # 勝利
-        elif idx == 16:
+        
+        elif idx == 16: # 勝利
             draw_battle(screen, fontS)
             if tmr == 1:
                 set_message("You win!")
@@ -622,8 +585,8 @@ def main():
                 if random.randint(0, emy_lifemax) > random.randint(0, pl_lifemax):
                     idx = 17
                     tmr = 0
-        # レベルアップ
-        elif idx == 17:
+        
+        elif idx == 17: # レベルアップ
             draw_battle(screen, fontS)
             if tmr == 1:
                 set_message("Level up!")
@@ -638,8 +601,8 @@ def main():
                 pl_str = pl_str + str_p
             if tmr == 50:
                 idx = 22
-        # Potion
-        elif idx == 20:
+
+        elif idx == 20: # Potion
             draw_battle(screen, fontS)
             if tmr == 1:
                 set_message("Potion!")
@@ -650,12 +613,12 @@ def main():
             if tmr == 11:
                 idx = 13
                 tmr = 0
-        # Blaze gem
-        elif idx == 21:
+
+        elif idx == 21: # Blaze gem
             draw_battle(screen, fontS)
             img_rz = pygame.transform.rotozoom(imgEffect[1], 30*tmr, (12-tmr)/8)
-            X = 440 - img_rz.get_width()/2
-            Y = 360 - img_rz.get_height()/2
+            X = 440-img_rz.get_width()/2
+            Y = 360-img_rz.get_height()/2
             screen.blit(img_rz, [X, Y])
             if tmr == 1:
                 set_message("Blaze gem!")
@@ -666,11 +629,12 @@ def main():
                 dmg = 1000
                 idx = 12
                 tmr = 4
-        # 戦闘終了
-        elif idx == 22:
+
+        elif idx == 22: # 戦闘終了
             pygame.mixer.music.load("sound/ohd_bgm_field.ogg")
             pygame.mixer.music.play(-1)
             idx = 1
+
         draw_text(screen, "[S]peed "+str(speed), 740, 40, fontS, WHITE)
 
         pygame.display.update()
