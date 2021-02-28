@@ -48,6 +48,7 @@ imgEffect = [
 ]
 
 # 変数の宣言
+save = 0
 speed = 1
 idx = 0
 tmr = 0
@@ -165,6 +166,12 @@ def draw_dungeon(bg, fnt): # ダンジョンを描画する
                         bg.blit(imgWall2, [X, Y-80])
             if x == 0 and y == 0: # 主人公キャラの表示
                 pl_a = pl_d*2 + ANIMATION[tmr%2] # 足踏みアニメーション
+                if idx == 9: # ゲームオーバー
+                    if tmr <= 30:
+                        PL_TURN = [2, 4, 0, 6]
+                        pl_a = PL_TURN[tmr%4]
+                        if tmr == 30: pl_a = 8 # 倒れた絵
+
                 bg.blit(imgPlayer[pl_a], [X, Y-40])
     bg.blit(imgDark, [0, 0]) # 四隅が暗闇の画像を重ねる
     draw_para(bg, fnt) # 主人公の能力を表示
@@ -637,6 +644,7 @@ def main(): # メイン処理
             idx = 1
 
         draw_text(screen, "[S]peed "+str(speed), 740, 40, fontS, WHITE)
+        draw_text(screen, "[V]save "+str(save), 600, 40, fontS, WHITE)
 
         pygame.display.update()
         clock.tick(4+2*speed)
