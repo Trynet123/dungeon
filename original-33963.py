@@ -79,6 +79,8 @@ emy_blink = 0
 dmg_eff = 0
 btl_cmd = 0
 
+ANIMATION = [0, 1]
+
 COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
 TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
 EMY_NAME = [
@@ -162,6 +164,7 @@ def draw_dungeon(bg, fnt): # ダンジョンを描画する
                     if dy >= 1 and dungeon[dy-1][dx] == 9:
                         bg.blit(imgWall2, [X, Y-80])
             if x == 0 and y == 0: # 主人公キャラの表示
+                pl_a = pl_d*2 + ANIMATION[tmr%2]
                 bg.blit(imgPlayer[pl_a], [X, Y-40])
     bg.blit(imgDark, [0, 0]) # 四隅が暗闇の画像を重ねる
     draw_para(bg, fnt) # 主人公の能力を表示
