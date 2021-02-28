@@ -48,7 +48,7 @@ imgEffect = [
 ]
 
 # 変数の宣言
-save = 0
+save = ""
 speed = 1
 idx = 0
 tmr = 0
@@ -85,7 +85,7 @@ ANIMATION = [0, 1]
 COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
 TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
 EMY_NAME = [
-    "Green slime", "Red slime", "Axe beast", "Ogre", "Sword man",
+    "The hand", "Red slime", "Axe beast", "Ogre", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
     ]
 
@@ -467,9 +467,6 @@ def main(): # メイン処理
         
         elif idx == 9: # ゲームオーバー
             if tmr <= 30:
-                PL_TURN = [2, 4, 0, 6]
-                pl_a = PL_TURN[tmr%4]
-                if tmr == 30: pl_a = 8 # 倒れた絵
                 draw_dungeon(screen, fontS)
             elif tmr == 31:
                 se[3].play()
