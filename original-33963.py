@@ -164,7 +164,7 @@ def draw_dungeon(bg, fnt): # ダンジョンを描画する
                     if dy >= 1 and dungeon[dy-1][dx] == 9:
                         bg.blit(imgWall2, [X, Y-80])
             if x == 0 and y == 0: # 主人公キャラの表示
-                pl_a = pl_d*2 + ANIMATION[tmr%2]
+                pl_a = pl_d*2 + ANIMATION[tmr%2] # 足踏みアニメーション
                 bg.blit(imgPlayer[pl_a], [X, Y-40])
     bg.blit(imgDark, [0, 0]) # 四隅が暗闇の画像を重ねる
     draw_para(bg, fnt) # 主人公の能力を表示
@@ -248,9 +248,7 @@ def move_player(key): # 主人公の移動
         pl_d = 3
         if dungeon[pl_y][pl_x+1] != 9:
             pl_x = pl_x + 1
-    pl_a = pl_d*2
     if pl_x != x or pl_y != y: # 移動したら食料の量と体力を計算
-        pl_a = pl_a + tmr%2 # 移動したら足踏みのアニメーション
         if food > 0:
             food = food - 1
             if pl_life < pl_lifemax:
