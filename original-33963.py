@@ -248,7 +248,6 @@ def move_player(key): # 主人公の移動
         pl_d = 3
         if dungeon[pl_y][pl_x+1] != 9:
             pl_x = pl_x + 1
-    pl_a = pl_d*2
     if pl_x != x or pl_y != y: # 移動したら食料の量と体力を計算
         if food > 0:
             food = food - 1
