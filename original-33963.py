@@ -48,7 +48,8 @@ imgEffect = [
 ]
 
 # 変数の宣言
-save = ""
+full = ""
+resize = ""
 speed = 1
 idx = 0
 tmr = 0
@@ -402,7 +403,11 @@ def main(): # メイン処理
                     speed = speed + 1
                     if speed == 4:
                         speed = 1
-        
+                if event.key == K_F1: # F1キーフルスクリーン
+                    screen = pygame.display.set_mode((880, 720), pygame.FULLSCREEN)
+                if event.key == K_F2 or event.key == K_ESCAPE: # F2/esc元のサイズ
+                    screen = pygame.display.set_mode((880, 720))
+    
         tmr = tmr + 1
         key = pygame.key.get_pressed()
 
@@ -641,7 +646,8 @@ def main(): # メイン処理
             idx = 1
 
         draw_text(screen, "[S]peed "+str(speed), 740, 40, fontS, WHITE)
-        draw_text(screen, "[V]save "+str(save), 600, 40, fontS, WHITE)
+        draw_text(screen, "[F1]full "+str(full), 600, 40, fontS, WHITE)
+        draw_text(screen, "[F2][esc]resize "+str(resize), 400, 40, fontS, WHITE)
 
         pygame.display.update()
         clock.tick(4+2*speed)
