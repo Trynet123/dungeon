@@ -393,7 +393,8 @@ def main(): # メイン処理
         pygame.mixer.Sound("sound/ohd_jin_win.ogg"),
         pygame.mixer.Sound("sound/item-get.ogg"),
         pygame.mixer.Sound("sound/spoil.ogg"),
-        pygame.mixer.Sound("sound/stair.ogg")
+        pygame.mixer.Sound("sound/stair.ogg"),
+        pygame.mixer.Sound("sound/foot.ogg")
     ]
 
     while True:
@@ -440,6 +441,8 @@ def main(): # メイン処理
             
         elif idx == 1: # プレイヤーの移動
             move_player(key)
+            if key[K_UP] == 1 or key[K_RIGHT] == 1 or key[K_LEFT] == 1 or key[K_DOWN] == 1:
+                se[9].play()
             draw_dungeon(screen, fontS)
             draw_text(screen, "floor {} ({},{})".format(floor, pl_x, pl_y), 60, 40, fontS, WHITE)
             if welcome > 0:
