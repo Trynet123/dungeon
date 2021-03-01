@@ -523,7 +523,7 @@ def main(): # メイン処理
                 se[0].play()
                 dmg = pl_str + random.randint(0, 9)
             if 2 <= tmr and tmr <= 4:
-                screen.blit(imgEffect[0], [700-tmr*120, -100+tmr*120])
+                screen.blit(imgEffect[0], [500-tmr*120, 10+tmr*120])
             if tmr == 5:
                 emy_blink = 5
                 set_message(str(dmg)+"pts of damage!")
