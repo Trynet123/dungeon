@@ -219,7 +219,7 @@ def move_player(key): # 主人公の移動
         idx = 3
         tmr = 0
         return
-    if dungeon[pl_y][pl_x] == 2: # 繭に載った
+    if dungeon[pl_y][pl_x] == 2: # ツボに載った
         dungeon[pl_y][pl_x] = 0
         r = random.randint(0, 99)
         if r < 40: # 食料
@@ -392,7 +392,8 @@ def main(): # メイン処理
         pygame.mixer.Sound("sound/ohd_jin_levup.ogg"),
         pygame.mixer.Sound("sound/ohd_jin_win.ogg"),
         pygame.mixer.Sound("sound/item-get.ogg"),
-        pygame.mixer.Sound("sound/spoil.ogg")
+        pygame.mixer.Sound("sound/spoil.ogg"),
+        pygame.mixer.Sound("sound/stair.ogg")
     ]
 
     while True:
@@ -447,6 +448,8 @@ def main(): # メイン処理
 
         elif idx == 2: # 画面切り替え
             draw_dungeon(screen, fontS)
+            if 1 == tmr:
+                se[8].play()
             if 1 <= tmr and tmr <= 5:
                 h = 80*tmr
                 pygame.draw.rect(screen, BLACK, [0, 0, 880, h])
