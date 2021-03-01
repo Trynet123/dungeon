@@ -86,7 +86,7 @@ ANIMATION = [0, 1]
 COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
 TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
 EMY_NAME = [
-    "The hand", "Red slime", "Axe beast", "Ogre", "Sword man",
+    "The hand", "Devil fire", "Axe beast", "Ogre", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
     ]
 
