@@ -390,7 +390,9 @@ def main(): # メイン処理
         pygame.mixer.Sound("sound/ohd_se_potion.ogg"),
         pygame.mixer.Sound("sound/ohd_jin_gameover.ogg"),
         pygame.mixer.Sound("sound/ohd_jin_levup.ogg"),
-        pygame.mixer.Sound("sound/ohd_jin_win.ogg")
+        pygame.mixer.Sound("sound/ohd_jin_win.ogg"),
+        pygame.mixer.Sound("sound/item-get.ogg"),
+        pygame.mixer.Sound("sound/spoil.ogg")
     ]
 
     while True:
@@ -468,7 +470,10 @@ def main(): # メイン処理
             screen.blit(imgItem[treasure], [320, 220])
             draw_text(screen, TRE_NAME[treasure], 380, 240, font, WHITE)
             if tmr == 1:
-                se[4].play()
+                if TRE_NAME[treasure] == "Food spoiled.":
+                    se[7].play()
+                else:
+                    se[6].play()
             if tmr == 10:
                 idx = 1
         
