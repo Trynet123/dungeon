@@ -401,11 +401,11 @@ def main(): # メイン処理
             if event.type == KEYDOWN:
                 if event.key == K_s:
                     speed = speed + 1
-                    if speed == 4:
+                    if speed == 9:
                         speed = 1
                 if event.key == K_F1: # F1キーフルスクリーン
                     screen = pygame.display.set_mode((880, 720), pygame.FULLSCREEN)
-                if event.key == K_F2 or event.key == K_ESCAPE: # F2/esc元のサイズ
+                if event.key == K_F2 or event.key == K_ESCAPE: # 元のサイズ
                     screen = pygame.display.set_mode((880, 720))
     
         tmr = tmr + 1
@@ -467,6 +467,8 @@ def main(): # メイン処理
             draw_dungeon(screen, fontS)
             screen.blit(imgItem[treasure], [320, 220])
             draw_text(screen, TRE_NAME[treasure], 380, 240, font, WHITE)
+            if tmr == 1:
+                se[4].play()
             if tmr == 10:
                 idx = 1
         
