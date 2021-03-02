@@ -83,8 +83,8 @@ btl_cmd = 0
 
 ANIMATION = [0, 1]
 
-COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
-TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
+COMMAND = ["[A]攻撃", "[P]回復", "[B]ブレイズジェム", "[R]逃げる"]
+TRE_NAME = ["ポーション", "ブレイズジェム", "Food spoiled.", "桃 +20", "抹茶ロールケーキ +100"]
 EMY_NAME = [
     "ハンド", "ファイア", "フライヒル", "Ogre", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
@@ -378,7 +378,7 @@ def main(): # メイン処理
     str_p = 0
 
     pygame.init()
-    pygame.display.set_caption("One hour Dungeon")
+    pygame.display.set_caption("DOWN THE DUNGEON")
     screen = pygame.display.set_mode((880, 720))
     clock = pygame.time.Clock()
     font = pygame.font.Font("IPAexfont00401/ipaexg.ttf", 30)
@@ -422,7 +422,7 @@ def main(): # メイン処理
             screen.fill(BLACK)
             screen.blit(imgTitle, [40, 60])
             if fl_max >= 2:
-                draw_text(screen, "You reached floor {}.".format(fl_max), 300, 460, font, CYAN)
+                draw_text(screen, "地下{}Fまで辿り着きました".format(fl_max), 300, 460, font, CYAN)
             draw_text(screen, "Press space key", 320, 560, font, BLINK[tmr%6])
             if key[K_SPACE] == 1:
                 make_dungeon()
@@ -444,10 +444,10 @@ def main(): # メイン処理
             if key[K_UP] == 1 or key[K_RIGHT] == 1 or key[K_LEFT] == 1 or key[K_DOWN] == 1:
                 se[9].play()
             draw_dungeon(screen, fontS)
-            draw_text(screen, "floor {} ({},{})".format(floor, pl_x, pl_y), 60, 40, fontS, WHITE)
+            draw_text(screen, "Floor {} ({},{})".format(floor, pl_x, pl_y), 60, 40, fontS, WHITE)
             if welcome > 0:
                 welcome = welcome - 1
-                draw_text(screen, "Welcome to floor {}.".format(floor), 300, 180, font, CYAN)
+                draw_text(screen, "地下{}F".format(floor), 300, 180, font, CYAN)
 
         elif idx == 2: # 画面切り替え
             draw_dungeon(screen, fontS)
@@ -476,7 +476,7 @@ def main(): # メイン処理
             screen.blit(imgItem[treasure], [320, 220])
             draw_text(screen, TRE_NAME[treasure], 380, 240, font, WHITE)
             if tmr == 1:
-                if TRE_NAME[treasure] == "Food spoiled.":
+                if TRE_NAME[treasure] == "食料が腐った‥":
                     se[7].play()
                 else:
                     se[6].play()
@@ -489,7 +489,7 @@ def main(): # メイン処理
             elif tmr == 31:
                 se[3].play()
                 draw_text(screen, "You died.", 360, 240, font, RED)
-                draw_text(screen, "Game over.", 360, 380, font, RED)
+                draw_text(screen, "GAME OVER", 360, 380, font, RED)
             elif tmr == 100:
                 idx = 0
                 tmr = 0
@@ -504,17 +504,17 @@ def main(): # メイン処理
                 bx = (4-tmr)*220
                 by = 0
                 screen.blit(imgBtlBG, [bx, by])
-                draw_text(screen, "Encounter!", 350, 200, font, WHITE)
+                draw_text(screen, "敵と遭遇！！", 350, 200, font, WHITE)
             elif tmr <= 16:
                 draw_battle(screen, fontS)
-                draw_text(screen, emy_name+" appear!", 300, 200, font, WHITE)
+                draw_text(screen, emy_name+" が現れた！", 300, 200, font, WHITE)
             else:
                 idx = 11
                 tmr = 0
 
         elif idx == 11: # プレイヤーのターン（入力待ち）
             draw_battle(screen, fontS)
-            if tmr == 1: set_message("Your turn.")
+            if tmr == 1: set_message("あなたのターン")
             if battle_command(screen, font, key) == True:
                 if btl_cmd == 0:
                     idx = 12
@@ -532,14 +532,14 @@ def main(): # メイン処理
         elif idx == 12: # プレイヤーの攻撃
             draw_battle(screen, fontS)
             if tmr == 1:
-                set_message("You attack!")
+                set_message("プレイヤーの攻撃！")
                 se[0].play()
                 dmg = pl_str + random.randint(0, 9)
             if 2 <= tmr and tmr <= 4:
                 screen.blit(imgEffect[0], [500-tmr*120, 10+tmr*120])
             if tmr == 5:
                 emy_blink = 5
-                set_message(str(dmg)+"pts of damage!")
+                set_message(str(dmg)+"ダメージ！")
             if tmr == 11:
                 emy_life = emy_life - dmg
                 if emy_life <= 0:
@@ -553,14 +553,14 @@ def main(): # メイン処理
         elif idx == 13: # 敵のターン、敵の攻撃
             draw_battle(screen, fontS)
             if tmr == 1:
-                set_message("Enemy turn.")
+                set_message("敵のターン")
             if tmr == 5:
-                set_message(emy_name + " attack!")
+                set_message(emy_name + " の攻撃！")
                 se[0].play()
                 emy_step = 30
             if tmr == 9:
                 dmg = emy_str + random.randint(0, 9)
-                set_message(str(dmg)+"pts of damage!")
+                set_message(str(dmg)+"ダメージ！")
                 dmg_eff = 5
                 emy_step = 0
             if tmr == 15:
@@ -583,7 +583,7 @@ def main(): # メイン処理
                 if random.randint(0, 99) < 60:
                     idx = 22
                 else:
-                    set_message("You failed to flee.")
+                    set_message("逃走に失敗！")
             if tmr == 10:
                 idx = 13
                 tmr = 0
@@ -592,7 +592,7 @@ def main(): # メイン処理
             draw_battle(screen, fontS)
             if tmr == 1:
                 pygame.mixer.music.stop()
-                set_message("You lose.")
+                set_message("バトルに敗れました")
             if tmr == 11:
                 idx = 9
                 tmr = 29
@@ -600,7 +600,7 @@ def main(): # メイン処理
         elif idx == 16: # 勝利
             draw_battle(screen, fontS)
             if tmr == 1:
-                set_message("You win!")
+                set_message("バトル勝利！！")
                 pygame.mixer.music.stop()
                 se[5].play()
             if tmr == 28:
@@ -628,7 +628,7 @@ def main(): # メイン処理
         elif idx == 20: # Potion
             draw_battle(screen, fontS)
             if tmr == 1:
-                set_message("Potion!")
+                set_message("ポーション！")
                 se[2].play()
             if tmr == 6:
                 pl_life = pl_lifemax
@@ -644,7 +644,7 @@ def main(): # メイン処理
             Y = 360-img_rz.get_height()/2
             screen.blit(img_rz, [X, Y])
             if tmr == 1:
-                set_message("Blaze gem!")
+                set_message("ブレイズジェム！")
                 se[1].play()
             if tmr == 6:
                 blazegem = blazegem - 1
@@ -658,9 +658,9 @@ def main(): # メイン処理
             pygame.mixer.music.play(-1)
             idx = 1
 
-        draw_text(screen, "[S]peed "+str(speed), 740, 40, fontS, WHITE)
+        draw_text(screen, "[S]スピード "+str(speed), 740, 40, fontS, WHITE)
         draw_text(screen, "[F1]full "+str(full), 600, 40, fontS, WHITE)
-        draw_text(screen, "[F2][esc]resize "+str(resize), 400, 40, fontS, WHITE)
+        draw_text(screen, "[F2][esc]元に戻す "+str(resize), 400, 40, fontS, WHITE)
 
         pygame.display.update()
         clock.tick(4+2*speed)
