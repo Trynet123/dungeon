@@ -86,7 +86,7 @@ ANIMATION = [0, 1]
 COMMAND = ["[A]ttack", "[P]otion", "[B]laze gem", "[R]un"]
 TRE_NAME = ["Potion", "Blaze gem", "Food spoiled.", "Food +20", "Food +100"]
 EMY_NAME = [
-    "The hand", "Devil fire", "Axe beast", "Ogre", "Sword man",
+    "ハンド", "ファイア", "フライヒル", "Ogre", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
     ]
 
@@ -381,8 +381,8 @@ def main(): # メイン処理
     pygame.display.set_caption("One hour Dungeon")
     screen = pygame.display.set_mode((880, 720))
     clock = pygame.time.Clock()
-    font = pygame.font.Font(None, 40)
-    fontS = pygame.font.Font(None, 30)
+    font = pygame.font.Font("IPAexfont00401/ipaexg.ttf", 30)
+    fontS = pygame.font.Font("IPAexfont00401/ipaexg.ttf", 20)
 
     se = [ # 効果音とジングル
         pygame.mixer.Sound("sound/ohd_se_attack.ogg"),
