@@ -86,7 +86,7 @@ ANIMATION = [0, 1]
 COMMAND = ["[A]攻撃", "[P]回復", "[B]ブレイズジェム", "[R]逃げる"]
 TRE_NAME = ["ポーション", "ブレイズジェム", "Food spoiled.", "桃 +20", "抹茶ロールケーキ +100"]
 EMY_NAME = [
-    "ハンド", "ファイア", "フライヒル", "Ogre", "Sword man",
+    "ハンド", "ファイア", "フライヒル", "モンスターエッグ", "Sword man",
     "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
     ]
 
@@ -152,8 +152,8 @@ def make_dungeon(): # ダンジョンの自動生成
 
 def draw_dungeon(bg, fnt): # ダンジョンを描画する
     bg.fill(BLACK)
-    for y in range(-4, 6):
-        for x in range(-5, 6):
+    for y in range(-2, 2):
+        for x in range(-2, 3):
             X = (x+5)*80
             Y = (y+4)*80
             dx = pl_x + x
@@ -174,7 +174,7 @@ def draw_dungeon(bg, fnt): # ダンジョンを描画する
                         if tmr == 30: pl_a = 8 # 倒れた絵
 
                 bg.blit(imgPlayer[pl_a], [X, Y-40])
-    bg.blit(imgDark, [0, 0]) # 四隅が暗闇の画像を重ねる
+    bg.blit(imgDark, [230, 0]) # 四隅が暗闇の画像を重ねる
     draw_para(bg, fnt) # 主人公の能力を表示
 
 def put_event(): # 床にイベントを配置する
