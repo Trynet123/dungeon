@@ -1,5 +1,5 @@
 # アプリ名：DOWN THE DUNGEON
-# 概要：ローグライクRPGをプレイできる
+# 概要：ローグライクRPG
 # 制作背景：大人も楽しめるRPGゲームを作るため
 # DEMO：https://gyazo.com/dfdafa634ec340e6a1f8f1e03e64ea5b
 # 工夫したポイント：リアルタイム処理、ダンジョンの自動生成
