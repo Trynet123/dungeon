@@ -10,3 +10,4 @@
 # ②ホームディレクトリにdungeon-mainフォルダを配置
 # ③cd dungeon-mainを実行
 # ④python original-33963.pyを実行
+※エラーが出た場合はPython 3.8.5 conda version4.9.2のインストールをお願い致します。
