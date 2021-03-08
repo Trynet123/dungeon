@@ -86,8 +86,8 @@ ANIMATION = [0, 1]
 COMMAND = ["[A]攻撃", "[P]回復", "[B]ブレイズジェム", "[R]逃げる"]
 TRE_NAME = ["ポーション", "ブレイズジェム", "Food spoiled.", "桃 +20", "抹茶ロールケーキ +100"]
 EMY_NAME = [
-    "ハンド", "ファイア", "フライヒル", "モンスターエッグ", "Sword man",
-    "Death hornet", "Signal slime", "Devil plant", "Twin killer", "Hell"
+    "ハンド", "ファイア", "フライヒル", "モンスターエッグ", "闇",
+    "ロック", "骸骨騎士", "グリーン・ドラゴン", "ホース", "マシーン"
     ]
 
 MAZE_W = 11
