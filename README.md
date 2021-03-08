@@ -7,5 +7,6 @@
 # 今後実装した機能：セーブ機能と敵キャラクターを徘徊させる機能
 # 遊び方：
 # ①CodeからDownload ZIPを選択
-# ②ターミナルからダウンロードしたdungeon-mainディレクトリに移動
-# ③python original-33963.pyを実行
+# ②ホームディレクトリにdungeon-mainフォルダを配置
+# ③cd dungeon-mainを実行
+# ④python original-33963.pyを実行
