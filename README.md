@@ -6,6 +6,6 @@
 # 使用技術：Python 3.8.5 conda version : 4.9.2　VScode
 # 今後実装した機能：セーブ機能と敵キャラクターを徘徊させる機能
 # 遊び方：
-①CodeからDownload ZIPを選択
-②ターミナルからダウンロードしたdungeon-mainディレクトリに移動
-% python original-33963.pyを実行
+# ①CodeからDownload ZIPを選択
+# ②ターミナルからダウンロードしたdungeon-mainディレクトリに移動
+# ③python original-33963.pyを実行
